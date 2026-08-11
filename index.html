@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>健身房條件檢查台｜安和路一段127巷</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* 深色：石墨底 + 奧林匹克槓片色碼 */
+  --bg:#14171B;
+  --surface:#1C2026;
+  --raised:#23282F;
+  --hair:#333A43;
+  --text:#E9ECEF;
+  --dim:#939BA4;
+  --blue:#5B93E8;   /* 20kg → 24 小時 */
+  --green:#4FB37A;  /* 10kg → 不綁約 */
+  --gold:#F0B429;   /* 15kg → 不推銷 */
+  --red:#E2564C;    /* 25kg → 警示 */
+  --dot:rgba(255,255,255,.045);
+  --onGold:#14171B;
+  --disp:"Oswald","Helvetica Neue Condensed",Impact,sans-serif;
+  --han:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:"Roboto Mono",ui-monospace,Menlo,monospace;
+}
+html[data-theme="light"]{
+  --bg:#F1F2EF; --surface:#FFFFFF; --raised:#17191B; --hair:#DCDED9;
+  --text:#17191B; --dim:#6B7178;
+  --blue:#2C5EA8; --green:#2F7A4C; --gold:#D89A0C; --red:#B4322B;
+  --dot:rgba(23,25,27,.05); --onGold:#FFFFFF;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:var(--han);font-size:16px;line-height:1.65;
+  background-image:radial-gradient(var(--dot) 1px,transparent 1px);
+  background-size:15px 15px;
+}
+.wrap{max-width:840px;margin:0 auto;padding:0 18px}
+a{color:inherit}
+
+/* ---------- hero ---------- */
+.hero{padding:34px 0 24px}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--dim);display:flex;gap:7px;align-items:center;flex-wrap:wrap;
+}
+.eyebrow b{color:var(--text);font-weight:500}
+.themebtn{
+  margin-left:auto;flex:none;cursor:pointer;font:inherit;font-size:12px;font-family:var(--mono);
+  letter-spacing:.1em;text-transform:uppercase;
+  background:transparent;color:var(--dim);border:1px solid var(--hair);border-radius:999px;padding:6px 12px;
+}
+.themebtn:hover{color:var(--text);border-color:var(--dim)}
+h1{
+  font-weight:800;font-size:clamp(29px,8vw,48px);line-height:1.14;letter-spacing:-.02em;margin:0 0 15px;
+}
+h1 .strike{position:relative;white-space:nowrap}
+h1 .strike::after{
+  content:"";position:absolute;left:-2%;right:-2%;top:56%;height:.13em;background:var(--red);
+  transform:scaleX(0);transform-origin:left;animation:cut .5s .5s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes cut{to{transform:scaleX(1)}}
+.deck{font-size:16px;color:var(--dim);max-width:48ch;margin:0}
+.deck em{font-style:normal;color:var(--text);border-bottom:2px solid var(--gold);font-weight:600}
+
+/* ---------- control panel ---------- */
+.panel{
+  position:sticky;top:0;z-index:30;margin:24px -18px 0;padding:13px 18px 14px;
+  background:var(--raised);color:var(--text);
+  border-top:2px solid var(--gold);
+  box-shadow:0 14px 34px -16px rgba(0,0,0,.75);
+  max-height:82vh;overflow:auto;
+}
+html[data-theme="light"] .panel{color:#F4F5F2}
+html[data-theme="light"] .panel .fnum,html[data-theme="light"] .panel .flab{color:#F4F5F2}
+.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.panel-title{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.count{font-family:var(--disp);font-size:14.5px;font-weight:500;white-space:nowrap;color:inherit}
+.count b{font-size:29px;font-weight:700;line-height:1;color:var(--gold);margin-right:2px}
+.count.zero b{color:var(--red)}
+
+.toggles{display:flex;gap:7px;flex-wrap:wrap}
+.tg{
+  appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--hair);background:rgba(255,255,255,.04);color:var(--dim);
+  border-radius:999px;padding:8px 14px 8px 10px;font:inherit;font-size:14.5px;font-weight:500;
+  transition:background .15s,border-color .15s,color .15s;
+}
+html[data-theme="light"] .tg{background:rgba(255,255,255,.08);border-color:#3A3F43;color:#C9CED2}
+.tg .disc{width:15px;height:15px;border-radius:50%;flex:none;border:2px dashed var(--dim);transition:all .15s}
+.tg[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+html[data-theme="light"] .tg[aria-pressed="true"]{background:#F4F5F2;color:#17191B;border-color:#F4F5F2}
+.tg[aria-pressed="true"] .disc{border-style:solid;border-color:transparent}
+.tg[data-k="h24"][aria-pressed="true"] .disc{background:var(--blue)}
+.tg[data-k="free"][aria-pressed="true"] .disc{background:var(--green)}
+.tg[data-k="nosale"][aria-pressed="true"] .disc{background:var(--gold)}
+.tg[data-k="trial"][aria-pressed="true"] .disc{background:var(--bg)}
+html[data-theme="light"] .tg[data-k="trial"][aria-pressed="true"] .disc{background:#17191B}
+
+.more{margin-top:11px;border-top:1px solid var(--hair);padding-top:2px}
+.more>summary{
+  list-style:none;cursor:pointer;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);padding:9px 0 7px;display:flex;align-items:center;gap:8px;
+}
+.more>summary::-webkit-details-marker{display:none}
+.more>summary::after{content:"＋";font-size:13px}
+.more[open]>summary::after{content:"−"}
+.more[open]>summary{color:var(--gold)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px 18px;padding:4px 0 11px}
+.field{min-width:0}
+.flab{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:6px}
+.fnum{font-family:var(--disp);font-size:15px;font-weight:600;color:inherit;margin-left:6px}
+input[type=range]{width:100%;accent-color:var(--gold);height:22px}
+select{
+  font:inherit;font-size:14.5px;width:100%;background:rgba(255,255,255,.05);color:inherit;
+  border:1px solid var(--hair);border-radius:7px;padding:7px 9px;
+}
+html[data-theme="light"] select{background:rgba(255,255,255,.1)}
+select option{color:#17191B;background:#fff}
+.chipset{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  appearance:none;cursor:pointer;font:inherit;font-size:13.5px;
+  background:transparent;color:var(--dim);border:1px solid var(--hair);border-radius:6px;padding:6px 10px;
+}
+.chip[aria-pressed="true"]{background:var(--gold);color:var(--onGold);border-color:var(--gold);font-weight:600}
+html[data-theme="light"] .chip[aria-pressed="true"]{color:#17191B}
+.check{display:flex;align-items:center;gap:8px;font-size:14.5px;cursor:pointer;padding-top:2px}
+.check input{width:17px;height:17px;accent-color:var(--gold)}
+.panel-foot{display:flex;align-items:center;gap:9px;margin-top:11px;flex-wrap:wrap}
+.panel-foot .flab{margin:0;white-space:nowrap}
+.panel-foot select{width:auto;flex:1;min-width:150px}
+.reset{
+  background:none;border:none;color:var(--dim);font:inherit;font-size:13.5px;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;padding:6px 0;white-space:nowrap;
+}
+
+/* ---------- results ---------- */
+.results{padding:22px 0 8px}
+.rule{display:flex;align-items:center;gap:12px;margin:0 0 15px}
+.rule span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.rule::after{content:"";flex:1;height:1px;background:var(--hair)}
+.legend{display:flex;gap:15px;flex-wrap:wrap;font-size:12.5px;color:var(--dim);margin:0 0 17px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:-1px;margin-right:5px;border:2px solid var(--gold)}
+.legend .l1 i{background:var(--gold)}
+.legend .l2 i{background:linear-gradient(90deg,var(--gold) 50%,transparent 50%)}
+.legend .l3 i{background:transparent;border-color:var(--hair)}
+
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:4px;margin-bottom:11px;overflow:hidden}
+.card.rec{border-left:4px solid var(--gold)}
+.card-top{padding:15px 16px 14px}
+.name{display:flex;align-items:flex-start;gap:9px;margin-bottom:3px}
+.name h3{font-size:18.5px;font-weight:700;margin:0;line-height:1.3;letter-spacing:-.01em}
+.rank{
+  font-family:var(--disp);font-size:12px;font-weight:600;letter-spacing:.05em;
+  background:var(--gold);color:var(--onGold);border-radius:2px;padding:2px 6px;flex:none;margin-top:4px;
+}
+html[data-theme="light"] .rank{color:#17191B}
+.type{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--dim);text-transform:uppercase;margin-bottom:12px}
+.plates{display:flex;gap:14px;margin:0 0 13px;flex-wrap:wrap}
+.plate{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--dim)}
+.pd{width:16px;height:16px;border-radius:50%;flex:none;border:2px dashed var(--hair)}
+.plate.on{color:var(--text);font-weight:600}
+.plate.on .pd{border-style:solid;border-color:transparent}
+.plate.part .pd{border-style:solid}
+.plate[data-k="h24"].on .pd{background:var(--blue)}
+.plate[data-k="free"].on .pd{background:var(--green)}
+.plate[data-k="nosale"].on .pd{background:var(--gold)}
+.plate[data-k="h24"].part .pd{background:linear-gradient(90deg,var(--blue) 50%,transparent 50%);border-color:var(--blue)}
+.plate[data-k="free"].part .pd{background:linear-gradient(90deg,var(--green) 50%,transparent 50%);border-color:var(--green)}
+.plate[data-k="nosale"].part .pd{background:linear-gradient(90deg,var(--gold) 50%,transparent 50%);border-color:var(--gold)}
+.plate.off .pd{border-style:solid;border-color:var(--hair);background:transparent}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair);border:1px solid var(--hair)}
+.stat{background:var(--bg);padding:9px 10px}
+html[data-theme="light"] .stat{background:#FAFAF8}
+.stat dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);margin:0 0 2px}
+.stat dd{margin:0;font-family:var(--disp);font-size:19px;font-weight:600;line-height:1.15}
+.stat dd small{font-family:var(--han);font-size:11.5px;font-weight:400;color:var(--dim)}
+
+details.d{border-top:1px solid var(--hair)}
+details.d>summary{
+  cursor:pointer;list-style:none;padding:11px 16px;font-size:14px;color:var(--dim);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+details.d>summary::-webkit-details-marker{display:none}
+details.d>summary::after{content:"＋";font-family:var(--mono);font-size:14px}
+details.d[open]>summary{color:var(--text);font-weight:600}
+details.d[open]>summary::after{content:"−"}
+.detail{padding:2px 16px 16px;font-size:14.5px;line-height:1.72}
+.detail p{margin:0 0 9px}
+.detail b{font-weight:600;color:var(--text)}
+.detail .warn{color:var(--red);font-weight:600}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.acts a{
+  font-size:14px;text-decoration:none;border:1px solid var(--text);color:var(--text);
+  border-radius:999px;padding:7px 15px;font-weight:600;
+}
+.acts a.solid{background:var(--gold);border-color:var(--gold);color:var(--onGold)}
+html[data-theme="light"] .acts a.solid{color:#17191B}
+
+.empty{background:var(--surface);border:1px solid var(--red);padding:24px 20px;border-radius:4px}
+.empty h3{font-weight:800;font-size:22px;margin:0 0 9px;line-height:1.35}
+.empty p{margin:0 0 14px;color:var(--dim);font-size:15px}
+.empty b{color:var(--text)}
+.empty .chips{display:flex;gap:8px;flex-wrap:wrap}
+.empty .chips button{
+  font:inherit;font-size:14.5px;font-weight:600;cursor:pointer;
+  background:var(--gold);color:var(--onGold);border:none;border-radius:999px;padding:9px 16px;
+}
+html[data-theme="light"] .empty .chips button{color:#17191B}
+
+section{padding:34px 0 0}
+h2{font-size:22px;font-weight:800;letter-spacing:-.01em;margin:0 0 14px}
+.steps{list-style:none;counter-reset:s;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px}
+.steps li::before{
+  content:counter(s);position:absolute;left:0;top:0;font-family:var(--disp);font-size:16px;font-weight:600;
+  width:30px;height:30px;border:1.5px solid var(--gold);color:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.steps h4{margin:2px 0 4px;font-size:16.5px;font-weight:700}
+.steps p{margin:0;font-size:14.5px;color:var(--dim)}
+.kicker{font-size:14.5px;color:var(--dim);margin-top:4px}
+.kicker b{color:var(--text)}
+.notes{background:var(--surface);border:1px solid var(--hair);padding:16px 18px;font-size:13.5px;line-height:1.72;color:var(--dim)}
+.notes h2{font-size:13px;letter-spacing:.14em;font-family:var(--mono);text-transform:uppercase;margin-bottom:9px;color:var(--dim)}
+.notes b{color:var(--text)}
+.notes ul{margin:0;padding-left:18px}
+.notes li{margin-bottom:7px}
+footer{padding:28px 0 46px;font-family:var(--mono);font-size:11px;letter-spacing:.07em;color:var(--dim);text-transform:uppercase}
+
+*:focus-visible{outline:2.5px solid var(--gold);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001s!important;transition-duration:.001s!important}
+  h1 .strike::after{transform:scaleX(1)}
+}
+@media (max-width:520px){
+  .fgrid{grid-template-columns:1fr}
+}
+@media (max-width:430px){
+  .stats{grid-template-columns:1fr 1fr}
+  .stat:last-child{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="topbar">
+      <div class="eyebrow"><span>大安區 安和路一段127巷</span><span>·</span><b>11 間場館</b><span>·</span><span>2026.08</span></div>
+      <button class="themebtn" id="theme">淺色</button>
+    </div>
+    <h1>三個條件，<br><span class="strike">最多只能滿足兩個</span></h1>
+    <p class="deck">24 小時、月繳不綁約、沒有業務推銷——你家附近<em>沒有一間店同時做到這三件事</em>。下面的檢查台讓你自己按，看放掉哪一條最不痛。</p>
+  </header>
+</div>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-title">條件檢查台</div>
+      <div class="count" id="count"><b>11</b>/ 11 間符合</div>
+    </div>
+
+    <div class="toggles" id="toggles">
+      <button class="tg" data-k="h24" aria-pressed="false"><span class="disc"></span>24 小時</button>
+      <button class="tg" data-k="free" aria-pressed="false"><span class="disc"></span>月繳不綁約</button>
+      <button class="tg" data-k="nosale" aria-pressed="false"><span class="disc"></span>不推銷</button>
+      <button class="tg" data-k="trial" aria-pressed="false"><span class="disc"></span>可先試用</button>
+    </div>
+
+    <details class="more" id="more">
+      <summary>更多篩選</summary>
+      <div class="fgrid">
+        <div class="field">
+          <label class="flab" for="dist">離家距離上限<span class="fnum" id="distOut">不限</span></label>
+          <input type="range" id="dist" min="800" max="2800" step="100" value="2800">
+        </div>
+        <div class="field">
+          <label class="flab" for="close">最晚營業到</label>
+          <select id="close">
+            <option value="0">不限</option>
+            <option value="23">23:00 之後</option>
+            <option value="24">午夜 24:00</option>
+            <option value="99">只看 24 小時</option>
+          </select>
+        </div>
+        <div class="field">
+          <span class="flab">計費方式</span>
+          <div class="chipset" id="bills">
+            <button class="chip" data-b="perMin" aria-pressed="false">按分鐘</button>
+            <button class="chip" data-b="perVisit" aria-pressed="false">單次入場</button>
+            <button class="chip" data-b="monthStop" aria-pressed="false">月費可隨時停</button>
+            <button class="chip" data-b="monthLock" aria-pressed="false">月費綁約／入會費</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="flab">場館條件</span>
+          <label class="check"><input type="checkbox" id="women">有女性專區（宜寧）</label>
+          <label class="check"><input type="checkbox" id="walkable">走得到，不用騎車</label>
+        </div>
+      </div>
+    </details>
+
+    <div class="panel-foot">
+      <label class="flab" for="sort">排序</label>
+      <select id="sort">
+        <option value="dist">離家最近</option>
+        <option value="match">符合條件最多</option>
+        <option value="late">營業最晚</option>
+        <option value="month">月費最低</option>
+        <option value="day">單次最便宜</option>
+        <option value="rank">推薦順序</option>
+      </select>
+      <button class="reset" id="reset">全部清除</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="results">
+    <div class="legend">
+      <span class="l1"><i></i>完全符合</span>
+      <span class="l2"><i></i>部分符合（有條件）</span>
+      <span class="l3"><i></i>不符合</span>
+    </div>
+    <div class="rule"><span id="rulelab">全部場館</span></div>
+    <div id="list"></div>
+  </div>
+
+  <section>
+    <h2>先試這三家，別急著辦卡</h2>
+    <ol class="steps">
+      <li>
+        <h4>健身星球 光復星球 — 一日券 200 元</h4>
+        <p>離你家最近（步行 12–15 分），器材是這份清單裡最強的。先確認尖峰人潮跟動線受不受得了。</p>
+      </li>
+      <li>
+        <h4>超核心 信義松仁 — 單次 200 元</h4>
+        <p>官方明講沒有業務單位，有女性專區，宜寧可以一起去各練各的。缺點是要騎車 8–10 分。</p>
+      </li>
+      <li>
+        <h4>JOV FIT 或 健身魂 — 悠遊卡按分鐘扣款</h4>
+        <p>實測「想去就去、各刷各的卡」是不是你要的模式。用多少付多少，零承諾。</p>
+      </li>
+    </ol>
+    <p class="kicker"><b>兩週後再決定：</b>一週去 2–3 次就走分鐘制或單次票，去到 4 次以上再考慮超核心 888 元月訂閱（可隨時停）。如果你真的會在凌晨 1–5 點練，才需要為 Anytime Fitness 的年約或 2,688 元／月讓步。</p>
+  </section>
+
+  <section>
+    <div class="notes">
+      <h2>資料限制 · 辦約前必做</h2>
+      <ul>
+        <li><b>XareFit 享健身 信義安和館已歇業</b>（2020 年因自由重量區擾鄰爭議被投訴後關閉），網路上仍搜得到的「月費 600、700 坪」舊文請直接忽略。</li>
+        <li><b>Anytime Fitness</b> 的免綁約月費約 2,688 元與入會／磁扣費，來自第三方比較文與舊討論串整理，數字可能已調整，請電洽 02-2703-2803 索取現行報價與合約範本。它<b>沒有單次票</b>，無法先試。</li>
+        <li><b>健身計畫 Project Fit 大安店</b>官方社群久未更新，2026 年是否營業請先電話確認 02-2703-3393 再前往。</li>
+        <li>超核心「首月建置費約 600 元」為網友回報，現場請向櫃台確認是否仍收。</li>
+        <li><b>「有女性專區」只有超核心信義松仁館經官方資料確認</b>，其餘場館是查不到資料、不是確定沒有，勾選這個篩選會把它們一併濾掉。</li>
+        <li>價格與營業時間會隨檔期變動，一律以官網／電話最新公告為準。距離為概估，實際請用地圖導航。</li>
+        <li>簽任何約前：要求看合約全文、確認解約條件與違約金、利用法定至少 3 天審閱期，不要當場被催簽。</li>
+        <li>「推銷程度」是個別使用者經驗，會因分店與當班人員而異，以你自己現場感受為準。</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>安和路一段127巷 · 條件檢查台 · 資料彙整 2025–2026 年公開來源</footer>
+</div>
+
+<script>
+const G = [
+  {
+    id:"hyper", rank:1, name:"超核心 Hypercore 信義松仁館", type:"月訂閱 · 可隨時終止 · 800坪",
+    h24:"no", free:"yes", nosale:"yes", trial:true, women:true,
+    distM:2300, mode:"ride", distText:"騎車 8–10 分", hours:"06:00–23:00", close:23,
+    month:688, monthText:"688–888", day:200, bill:["monthStop","perVisit"],
+    detail:[
+      ["地址","台北市信義區松仁路89號B1（象山站1號出口）"],
+      ["費用","享樂卡 888 元／月（全時段）、享受卡 688 元／月（平日16:00前＋假日全天）。月訂閱信用卡扣款、<b>可隨時終止</b>。單次入場 200 元、單次＋InBody 300 元。網友回報首月另收約 600 元建置費，請現場確認。"],
+      ["器材","800 坪，自由重量區極完整（深蹲架、硬舉台、臀推架、大量槓鈴啞鈴、史密斯），另有功能草皮、拳擊區、<b>女性專區</b>。"],
+      ["推銷","官方場館介紹自述沒有業務單位、不會強迫推銷、體驗時不打擾——這份清單裡對怕推銷族群最友善的品牌。"],
+      ["兩人","個人月訂閱制，各自訂閱、各練各的；宜寧可用女性專區。"]
+    ],
+    tel:"", site:"https://hypercore.com.tw"
+  },
+  {
+    id:"star", rank:2, name:"健身星球 光復星球", type:"單次／分鐘計費 · 400坪 · 步行可到",
+    h24:"no", free:"yes", nosale:"yes", trial:true, women:false,
+    distM:1100, mode:"walk", distText:"步行 12–15 分", hours:"07:00–24:00", close:24,
+    month:888, monthText:"888（綁一年）", day:200, bill:["perVisit","perMin","monthLock"],
+    detail:[
+      ["地址","台北市光復南路549號1F"],
+      ["費用","一日券 <b>200 元</b>；分鐘計費 07:00–17:00 每分 1.2 元、17:00–24:00 每分 1.5 元。<span class='warn'>月費 888 元的方案要綁一年＋1,000 元手續費——想免綁約就走一日券或分鐘制。</span>"],
+      ["器材","約 400 坪，義大利 Panatta、Hammer Strength、Life Fitness、Gymleco、Nautilus、Gym80 都有，槓架數量多。Dcard 評價練起來舒服、人不多。"],
+      ["推銷","自助型、App 綁卡進出，低推銷。"],
+      ["兩人","單次／分鐘制天生適合各刷各的。"]
+    ],
+    tel:"02-2720-8880", site:""
+  },
+  {
+    id:"jov", rank:3, name:"JOV FIT 健身流", type:"純分鐘計費 · 無月費 · 大安站",
+    h24:"no", free:"yes", nosale:"yes", trial:true, women:false,
+    distM:1200, mode:"walk", distText:"步行 13–16 分", hours:"07:00–24:00", close:24,
+    month:null, monthText:"無月費", day:0, bill:["perMin"],
+    detail:[
+      ["地址","台北市大安區復興南路二段25號B2（大安站4號出口步行 3 分）"],
+      ["費用","<b>1.8 元／分鐘</b>，刷悠遊卡／一卡通進出。無綁約、無月費、無預付金。"],
+      ["器材","工業風，自由重量區、固定器材、功能草皮、有氧、按摩室、AED、獨立更衣室。"],
+      ["推銷","自助型，教練自由進駐、平台不強制，無業務推銷。"],
+      ["兩人","各刷各的卡、各練各的，最自由。"]
+    ],
+    tel:"", site:"https://jovfitness.com"
+  },
+  {
+    id:"soul", rank:3, name:"健身魂 Soulfit 大安店", type:"純分鐘計費 · 尖離峰分級",
+    h24:"no", free:"yes", nosale:"yes", trial:true, women:false,
+    distM:1600, mode:"walk", distText:"步行 18–20 分", hours:"07:30–23:30", close:23.5,
+    month:null, monthText:"無月費", day:0, bill:["perMin"],
+    detail:[
+      ["地址","台北市大安區信義路三段109號B1（大安站2號出口／大安森林公園站6號出口）"],
+      ["費用","悠遊卡分鐘計費、不綁約。尖峰（週一至五 17:00–21:00）1.6 元／分，離峰 1.3 元／分，一次性註冊費 100 元。"],
+      ["器材","自由重量（啞鈴、槓鈴）、固定器材、有氧，設有盥洗空間。"],
+      ["推銷","自助型，低推銷。"],
+      ["兩人","各刷各的卡。"]
+    ],
+    tel:"", site:""
+  },
+  {
+    id:"anytime", rank:null, name:"Anytime Fitness 台北信義安和店", type:"唯一真 24 小時 · 會員制",
+    h24:"yes", free:"part", nosale:"yes", trial:false, women:false,
+    distM:800, mode:"walk", distText:"步行 8–12 分", hours:"24 小時 · 全年無休", close:99,
+    month:1188, monthText:"1,188 起／免約 2,688", day:null, bill:["monthLock"],
+    detail:[
+      ["地址","台北市大安區信義路四段279號B1（信義安和站5號出口對面）"],
+      ["營業","真 24 小時，駐店人員約 12:00–21:00，其他時段無人但可刷磁扣進出。會員磁扣可用於全球 5,500＋ 場館。"],
+      ["費用","<span class='warn'>綁一年約 1,188–1,388 元／月；免年約方案月費跳到約 2,688 元／月。</span>另需入會費約 2,500 元＋磁扣費約 1,700 元。也就是「免綁約」在這裡要用高很多的月費換。"],
+      ["器材","約 5 支深蹲架、1 台史密斯、Cable、啞鈴、機械式與 4–5 台跑步機。空間不大但人少。"],
+      ["推銷","多數評價說不強迫推銷、人員親切，屬中低度推銷。"],
+      ["先試","<span class='warn'>沒有單次票，無法先試，只能預約參觀。</span>"]
+    ],
+    tel:"02-2703-2803", site:""
+  },
+  {
+    id:"pfit", rank:null, name:"健身計畫 Project Fit 大安店", type:"分鐘計費 · 220坪 · 營運狀態待確認",
+    h24:"no", free:"yes", nosale:"yes", trial:true, women:false,
+    distM:1100, mode:"walk", distText:"步行 13 分", hours:"07:00–24:00", close:24,
+    month:null, monthText:"無月費", day:0, bill:["perMin"],
+    detail:[
+      ["地址","台北市大安區復興南路二段27號B2（大安站步行 2 分）"],
+      ["費用","1.5 元／分鐘、無入會費、不綁約，悠遊卡／一卡通進出，220 坪。每月第三個週五上午環境維護。"],
+      ["注意","<span class='warn'>官方社群更新停留在 2020–2021 年，2026 年是否營業請先電話確認再前往。</span>原信義路四段的女性專屬安和店已由其他業者接手，別再找那間。"],
+      ["推銷","主打自由教練免場租、免會費不綁約，低推銷。"]
+    ],
+    tel:"02-2703-3393", site:""
+  },
+  {
+    id:"factory", rank:null, name:"健身工廠 台北信義廠", type:"大型連鎖 · 1,300坪 · 器材最完整",
+    h24:"no", free:"part", nosale:"part", trial:true, women:false,
+    distM:2500, mode:"ride", distText:"騎車 10 分", hours:"一至六 06:00–24:00 · 日 08:00–24:00", close:24,
+    month:1088, monthText:"1,088–1,288", day:null, bill:["monthLock"],
+    detail:[
+      ["地址","台北市信義區松壽路22號4樓（NEO19，象山站1號出口／市府站3號出口）"],
+      ["費用","月費全時段 1,288 元／限制時段 1,088 元。<span class='warn'>首次入會費 2,500 元＋手續費 1,000 元。</span>主打月費制、無年約，但有入會門檻費用。"],
+      ["器材","近 1,300 坪，Hammer Strength、Life Fitness、Panatta、gym80，自由重量與深蹲架數量在連鎖中屬前段班。"],
+      ["先試","提供 7 日免費體驗。"],
+      ["推銷","有業務編制，但業界評價健體顧問較不強迫。"]
+    ],
+    tel:"", site:""
+  },
+  {
+    id:"wgtonghua", rank:null, name:"World Gym 通化店 Express", type:"大型連鎖 · 綁約 · 有業務",
+    h24:"no", free:"no", nosale:"no", trial:false, women:false,
+    distM:1300, mode:"walk", distText:"步行 15 分", hours:"06:00–24:00", close:24,
+    month:588, monthText:"588–888＋手續費", day:null, bill:["monthLock"],
+    detail:[
+      ["地址","台北市大安區，鄰通化夜市／臨江夜市（信義安和與六張犁站之間）"],
+      ["費用","Express 館月費約 588–888 元，<span class='warn'>手續費約 2,588–2,888 元，通常需綁約。</span>"],
+      ["器材","整層樓大空間、落地窗、國際品牌器材。"],
+      ["推銷","有業務、會推教練課，屬中高度推銷。務必看清合約條款與解約違約金。"]
+    ],
+    tel:"", site:"https://www.worldgymtaiwan.com"
+  },
+  {
+    id:"wgdaan", rank:null, name:"World Gym 台北大安店", type:"大型連鎖一般館 · 綁約 · 有業務",
+    h24:"no", free:"no", nosale:"no", trial:false, women:false,
+    distM:1500, mode:"walk", distText:"步行 17 分", hours:"06:00–24:00", close:24,
+    month:1188, monthText:"1,188–1,488", day:null, bill:["monthLock"],
+    detail:[
+      ["地址","大安站共構大樓 3、4、5 樓（信義線／文湖線）"],
+      ["費用","一般館月費約 1,188–1,488 元，綁約。"],
+      ["推銷","同通化店，有業務推銷。"]
+    ],
+    tel:"", site:""
+  },
+  {
+    id:"daansc", rank:null, name:"大安運動中心", type:"市民運動中心 · 50元／小時 · 零推銷",
+    h24:"no", free:"yes", nosale:"yes", trial:true, women:false,
+    distM:2000, mode:"ride", distText:"騎車 8 分", hours:"體適能 06:00–22:00", close:22,
+    month:1500, monthText:"活力卡 1,500／30天", day:50, bill:["perVisit","monthStop"],
+    detail:[
+      ["地址","台北市大安區辛亥路三段55號（科技大樓站／六張犁站）"],
+      ["費用","體適能全票 <b>50 元／小時</b>、敬老 25 元／小時、活力卡 1,500 元／30 天（限本人）、InBody 250 元／次。無綁約、無業務推銷。"],
+      ["器材","深蹲架、史密斯機、臥推架、包膠與電鍍啞鈴、多種機械與有氧器材，齊全。"],
+      ["注意","尖峰人多器材要等。須自備大於 A3 的毛巾、運動服鞋，16 歲以下不得進入。"]
+    ],
+    tel:"", site:"https://www.daansports.com.tw"
+  },
+  {
+    id:"xysc", rank:null, name:"信義運動中心（暨永春活力館）", type:"市民運動中心 · 單次 90–100 元",
+    h24:"no", free:"yes", nosale:"yes", trial:true, women:false,
+    distM:2700, mode:"ride", distText:"騎車 10 分", hours:"體適能 09:00–21:00", close:21,
+    month:1200, monthText:"月票 1,200／30天", day:90, bill:["perVisit","monthStop"],
+    detail:[
+      ["地址","台北市信義區松勤街100號（象山站）"],
+      ["費用","普通票 100 元／次、台北市民票 90 元、優待票 50 元、月票 1,200 元／30 天。無綁約、無推銷。"],
+      ["器材","心肺有氧區、固定式器材區、自由重量區、伸展區。"]
+    ],
+    tel:"", site:""
+  }
+];
+
+const LABELS = {h24:"24 小時", free:"月繳不綁約", nosale:"不推銷"};
+const BILLS = {perMin:"按分鐘", perVisit:"單次入場", monthStop:"月費可隨時停", monthLock:"月費綁約／入會費"};
+const state = {h24:false, free:false, nosale:false, trial:false, dist:2800, close:0, bills:[], women:false, walkable:false, sort:"dist"};
+
+const el = id => document.getElementById(id);
+const listEl = el("list"), countEl = el("count"), ruleEl = el("rulelab");
+
+function plate(k,v){
+  const cls = v==="yes" ? "on" : v==="part" ? "part" : "off";
+  return '<div class="plate '+cls+'" data-k="'+k+'"><span class="pd"></span>'+LABELS[k]+(v==="part"?"（有條件）":"")+'</div>';
+}
+function mapLink(n){ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(n); }
+function score(g){
+  return ["h24","free","nosale"].reduce((s,k)=> s + (g[k]==="yes"?1:g[k]==="part"?.5:0), 0);
+}
+
+function card(g){
+  const rank = g.rank ? '<span class="rank">推薦 '+g.rank+'</span>' : '';
+  const dayText = g.day===null ? '無' : g.day===0 ? '按分鐘' : g.day+' 元';
+  const mins = g.distText.replace(/^(步行|騎車)\s*/,"").replace(" 分","");
+  const rows = g.detail.map(d => '<p><b>'+d[0]+'：</b>'+d[1]+'</p>').join("");
+  const acts = [];
+  if (g.tel) acts.push('<a class="solid" href="tel:'+g.tel.replace(/-/g,"")+'">撥 '+g.tel+'</a>');
+  acts.push('<a href="'+mapLink(g.name)+'" target="_blank" rel="noopener">開地圖</a>');
+  if (g.site) acts.push('<a href="'+g.site+'" target="_blank" rel="noopener">看官網</a>');
+  return '<article class="card'+(g.rank?' rec':'')+'">'+
+    '<div class="card-top">'+
+      '<div class="name">'+rank+'<h3>'+g.name+'</h3></div>'+
+      '<div class="type">'+g.type+'</div>'+
+      '<div class="plates">'+plate("h24",g.h24)+plate("free",g.free)+plate("nosale",g.nosale)+'</div>'+
+      '<dl class="stats">'+
+        '<div class="stat"><dt>離家</dt><dd>'+mins+' <small>分 '+(g.mode==="ride"?"騎車":"步行")+'</small></dd></div>'+
+        '<div class="stat"><dt>月費</dt><dd>'+g.monthText+'</dd></div>'+
+        '<div class="stat"><dt>單次入場</dt><dd>'+dayText+'</dd></div>'+
+      '</dl>'+
+    '</div>'+
+    '<details class="d"><summary>營業 '+g.hours+'　—　看細節</summary>'+
+      '<div class="detail">'+rows+'<div class="acts">'+acts.join("")+'</div></div>'+
+    '</details>'+
+  '</article>';
+}
+
+function filtered(){
+  return G.filter(g=>{
+    if (state.h24 && g.h24!=="yes") return false;
+    if (state.free && g.free!=="yes") return false;
+    if (state.nosale && g.nosale!=="yes") return false;
+    if (state.trial && !g.trial) return false;
+    if (g.distM > state.dist) return false;
+    if (state.close && g.close < state.close) return false;
+    if (state.bills.length && !state.bills.some(b=>g.bill.indexOf(b)>-1)) return false;
+    if (state.women && !g.women) return false;
+    if (state.walkable && g.mode!=="walk") return false;
+    return true;
+  });
+}
+function sorted(a){
+  const s = a.slice(), n = v => v===null ? 1e9 : v;
+  if (state.sort==="dist")  s.sort((x,y)=> x.distM-y.distM);
+  if (state.sort==="match") s.sort((x,y)=> score(y)-score(x) || x.distM-y.distM);
+  if (state.sort==="late")  s.sort((x,y)=> y.close-x.close || x.distM-y.distM);
+  if (state.sort==="month") s.sort((x,y)=> n(x.month)-n(y.month));
+  if (state.sort==="day")   s.sort((x,y)=> n(x.day)-n(y.day));
+  if (state.sort==="rank")  s.sort((x,y)=> (x.rank||99)-(y.rank||99) || x.distM-y.distM);
+  return s;
+}
+
+function activeLabels(){
+  const out = [];
+  ["h24","free","nosale"].forEach(k=>{ if(state[k]) out.push(LABELS[k]); });
+  if (state.trial) out.push("可先試用");
+  if (state.dist < 2800) out.push("≤ "+(state.dist/1000).toFixed(1)+"km");
+  if (state.close) out.push(state.close===99?"24 小時":"開到 "+state.close+":00 後");
+  state.bills.forEach(b=>out.push(BILLS[b]));
+  if (state.women) out.push("女性專區");
+  if (state.walkable) out.push("步行可到");
+  return out;
+}
+
+function emptyBlock(){
+  const hard = ["h24","free","nosale"].filter(k=>state[k]);
+  const chips = [];
+  hard.forEach(k=> chips.push('<button data-off="'+k+'">放掉「'+LABELS[k]+'」</button>'));
+  if (state.dist<2800) chips.push('<button data-off="dist">距離不限</button>');
+  if (state.close) chips.push('<button data-off="close">營業時間不限</button>');
+  if (state.bills.length) chips.push('<button data-off="bills">計費方式不限</button>');
+  if (state.women) chips.push('<button data-off="women">不限女性專區</button>');
+  if (state.walkable) chips.push('<button data-off="walkable">可以騎車</button>');
+  if (state.trial) chips.push('<button data-off="trial">不用先試用</button>');
+  let near = "條件組合太窄了，鬆開一項看看。";
+  if (hard.length===3) near = "最接近的兩家：<b>Anytime Fitness</b>（差在免綁約要 2,688 元／月）和 <b>超核心信義松仁</b>（差在 23:00 關門）。";
+  return '<div class="empty"><h3>沒有場館同時滿足這些條件。</h3><p>'+near+'</p><div class="chips">'+chips.join("")+'</div></div>';
+}
+
+function render(){
+  const res = sorted(filtered());
+  countEl.innerHTML = "<b>"+res.length+"</b>/ "+G.length+" 間符合";
+  countEl.classList.toggle("zero", res.length===0);
+  const on = activeLabels();
+  ruleEl.textContent = on.length ? "篩選：" + on.join(" ＋ ") : "全部場館";
+  listEl.innerHTML = res.length ? res.map(card).join("") : emptyBlock();
+
+  listEl.querySelectorAll("[data-off]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const k = b.getAttribute("data-off");
+      if (k==="dist"){ state.dist=2800; el("dist").value=2800; el("distOut").textContent="不限"; }
+      else if (k==="close"){ state.close=0; el("close").value="0"; }
+      else if (k==="bills"){ state.bills=[]; document.querySelectorAll("#bills .chip").forEach(c=>c.setAttribute("aria-pressed","false")); }
+      else if (k==="women"||k==="walkable"){ state[k]=false; el(k).checked=false; }
+      else { state[k]=false; document.querySelector('.tg[data-k="'+k+'"]').setAttribute("aria-pressed","false"); }
+      render();
+    });
+  });
+}
+
+el("toggles").addEventListener("click", e=>{
+  const b = e.target.closest(".tg"); if(!b) return;
+  const k = b.getAttribute("data-k");
+  state[k] = !state[k];
+  b.setAttribute("aria-pressed", state[k]?"true":"false");
+  render();
+});
+el("bills").addEventListener("click", e=>{
+  const c = e.target.closest(".chip"); if(!c) return;
+  const b = c.getAttribute("data-b");
+  const i = state.bills.indexOf(b);
+  if (i>-1) state.bills.splice(i,1); else state.bills.push(b);
+  c.setAttribute("aria-pressed", i>-1?"false":"true");
+  render();
+});
+el("dist").addEventListener("input", e=>{
+  state.dist = +e.target.value;
+  el("distOut").textContent = state.dist>=2800 ? "不限" : (state.dist/1000).toFixed(1)+" km";
+  render();
+});
+el("close").addEventListener("change", e=>{ state.close = +e.target.value; render(); });
+el("women").addEventListener("change", e=>{ state.women = e.target.checked; render(); });
+el("walkable").addEventListener("change", e=>{ state.walkable = e.target.checked; render(); });
+el("sort").addEventListener("change", e=>{ state.sort = e.target.value; render(); });
+
+el("reset").addEventListener("click", ()=>{
+  Object.assign(state,{h24:false,free:false,nosale:false,trial:false,dist:2800,close:0,bills:[],women:false,walkable:false});
+  document.querySelectorAll(".tg").forEach(t=>t.setAttribute("aria-pressed","false"));
+  document.querySelectorAll("#bills .chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+  el("dist").value=2800; el("distOut").textContent="不限"; el("close").value="0";
+  el("women").checked=false; el("walkable").checked=false;
+  render();
+});
+
+el("theme").addEventListener("click", ()=>{
+  const dark = document.documentElement.getAttribute("data-theme")==="dark";
+  document.documentElement.setAttribute("data-theme", dark?"light":"dark");
+  el("theme").textContent = dark?"深色":"淺色";
+});
+
+render();
+</script>
+</body>
+</html>
